@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bakery_kpModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tittle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="total" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TimeStart" Type="DateTime" Precision="3" />
+    <Property Name="TimeEnd" Type="DateTime" Precision="3" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <Property Name="delivery" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Pickup" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="orderproduct" Relationship="Self.FK_orderproduct_orderproduct" FromRole="Order" ToRole="orderproduct" />
+  </EntityType>
+  <EntityType Name="orderproduct">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="productid" Type="Int32" />
+    <Property Name="count" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="orderid" Type="Int32" />
+    <NavigationProperty Name="Order" Relationship="Self.FK_orderproduct_orderproduct" FromRole="orderproduct" ToRole="Order" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_orderproduct_Product" FromRole="orderproduct" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Photo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="orderproduct" Relationship="Self.FK_orderproduct_Product" FromRole="Product" ToRole="orderproduct" />
+    <NavigationProperty Name="Product1" Relationship="Self.FK_Product_Product" FromRole="Product" ToRole="Product1" />
+    <NavigationProperty Name="Product2" Relationship="Self.FK_Product_Product" FromRole="Product1" ToRole="Product" />
+    <NavigationProperty Name="Product11" Relationship="Self.FK_Product_Product1" FromRole="Product" ToRole="Product1" />
+    <NavigationProperty Name="Product3" Relationship="Self.FK_Product_Product1" FromRole="Product1" ToRole="Product" />
+    <NavigationProperty Name="Product12" Relationship="Self.FK_Product_Product2" FromRole="Product" ToRole="Product1" />
+    <NavigationProperty Name="Product4" Relationship="Self.FK_Product_Product2" FromRole="Product1" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK_orderproduct_orderproduct">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="orderproduct" Type="Self.orderproduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="orderproduct">
+        <PropertyRef Name="orderid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orderproduct_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="orderproduct" Type="Self.orderproduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="orderproduct">
+        <PropertyRef Name="productid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Product1" Type="Self.Product" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_Product1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Product1" Type="Self.Product" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_Product2">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Product1" Type="Self.Product" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bakery_kpEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Order" EntityType="Self.Order" />
+    <EntitySet Name="orderproduct" EntityType="Self.orderproduct" />
+    <EntitySet Name="Product" EntityType="Self.Product" />
+    <AssociationSet Name="FK_orderproduct_orderproduct" Association="Self.FK_orderproduct_orderproduct">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="orderproduct" EntitySet="orderproduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orderproduct_Product" Association="Self.FK_orderproduct_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="orderproduct" EntitySet="orderproduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_Product" Association="Self.FK_Product_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Product1" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_Product1" Association="Self.FK_Product_Product1">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Product1" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_Product2" Association="Self.FK_Product_Product2">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Product1" EntitySet="Product" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
